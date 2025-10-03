@@ -1,21 +1,13 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Sparkles } from "lucide-react";
-import { Badge } from "../ui/badge";
 import Link from "next/link";
+import GradientBadge from "../common/gradient-badge";
 
 export default function HeroSection() {
   return (
     <section className="relative z-0 max-w-7xl mx-auto flex flex-col items-center justify-center animate-in transition-all py-16 sm:py-20 lg:pb-28 lg:px-12">
-      <div className="relative p-[1.5px] overflow-hidden rounded-full bg-linear-to-r from-rose-300 via-rose-500 to-rose-800 group">
-        <Badge
-          variant="secondary"
-          className="relative px-6 py-2 text-base rounded-full [&>svg]:size-6 bg-white pointer-events-none"
-        >
-          <Sparkles className="w-6 h-6 mr-2 text-rose-600 animate-pulse" />
-          <p className="text-base text-rose-600">Powered By AI</p>
-        </Badge>
-      </div>
+      <GradientBadge icon={Sparkles}>Powered By AI</GradientBadge>
       <h1 className="font-bold py-6 text-center">
         Transform PDFs into{" "}
         <span className="relative inline-block">
