@@ -3,21 +3,14 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, Sparkles } from "lucide-react";
 import Link from "next/link";
 import GradientBadge from "../common/gradient-badge";
+import HighlightedText from "../common/highlighted-text";
 
 export default function HeroSection() {
   return (
     <section className="relative z-0 max-w-7xl mx-auto flex flex-col items-center justify-center animate-in transition-all py-16 sm:py-20 lg:pb-28 lg:px-12">
       <GradientBadge icon={Sparkles}>Powered By AI</GradientBadge>
       <h1 className="font-bold py-6 text-center">
-        Transform PDFs into{" "}
-        <span className="relative inline-block">
-          <span
-            className="absolute inset-0 bg-rose-200/50 -skew-3 -skew-y-1 -rotate-2 rounded-lg"
-            aria-hidden="true"
-          ></span>
-          <span className="relative px-2">concise</span>
-        </span>{" "}
-        summaries
+        Transform PDFs into <HighlightedText>concise</HighlightedText> summaries
       </h1>
       <h2 className="text-lg sm:text-xl lg:text-2xl text-center px-4 lg:px-0 lg:max-w-4xl text-gray-600">
         Get a beautiful summary reel of the document in seconds.
