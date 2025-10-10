@@ -1,4 +1,3 @@
-import React from "react";
 import UploadForm from "@/components/upload/upload-form";
 import UploadHeader from "@/components/upload/upload-header";
 

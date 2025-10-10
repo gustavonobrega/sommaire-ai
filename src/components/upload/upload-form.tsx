@@ -1,12 +1,15 @@
 "use client";
 
-import { z } from "zod";
+import { Loader } from "lucide-react";
+import { useRef, useState } from "react";
+
 import { toast } from "sonner";
+import { z } from "zod";
+
+import { generatePdfSummary } from "@/actions/upload-actions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useUploadThing } from "@/lib/uploadthing";
-import { useRef, useState } from "react";
-import { Loader } from "lucide-react";
 
 const uploadFileSchema = z.object({
   file: z
@@ -16,8 +19,8 @@ const uploadFileSchema = z.object({
 });
 
 export default function UploadForm() {
-  const formRef = useRef<HTMLFormElement>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const formRef = useRef<HTMLFormElement>(null);
 
   const { startUpload } = useUploadThing("pdfUploader", {
     onUploadBegin: (fileName) => {
@@ -25,14 +28,8 @@ export default function UploadForm() {
         description: "Upload has begun for: " + fileName,
       });
     },
-    onClientUploadComplete: () => {
-      console.log("uploaded successfully!");
-    },
     onUploadError: (err) => {
       console.error("error occurred while uploading", err);
-      toast.error("Error occured while uploading", {
-        description: err.message,
-      });
     },
   });
 
@@ -43,7 +40,6 @@ export default function UploadForm() {
       setIsLoading(true);
       const formData = new FormData(e.currentTarget);
       const file = formData.get("file") as File;
-
       const validatedFields = uploadFileSchema.safeParse({ file });
 
       if (!validatedFields.success) {
@@ -55,15 +51,33 @@ export default function UploadForm() {
         return;
       }
 
-      const resp = await startUpload([file]);
-      if (!resp) {
+      const uploadResponse = await startUpload([file]);
+      if (!uploadResponse) {
         toast.error("Something went wrong", {
-          description: "Please use different type",
+          description:
+            "Error occured while uploading the PDF, please try again...",
         });
         return;
       }
+
+      const { ufsUrl: fileUrl } = uploadResponse[0];
+
+      toast("📄 Processing PDF", {
+        description: "Hang tight! our AI is processing your document ⚡️",
+      });
+
+      const { success, data } = await generatePdfSummary(fileUrl);
+
+      if (success === false && !data) {
+        toast.error("Something went wrong", {
+          description:
+            "Error occured while summarizing the PDF, please try again...",
+        });
+        formRef.current?.reset();
+        return;
+      }
     } catch (error) {
-      console.error("Error occured", error);
+      toast.error("Something went wrong, please try again later...");
       formRef.current?.reset();
     } finally {
       setIsLoading(false);
