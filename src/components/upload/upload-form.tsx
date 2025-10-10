@@ -2,14 +2,15 @@
 
 import { Loader } from "lucide-react";
 import { useRef, useState } from "react";
-
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { z } from "zod";
 
-import { generatePdfSummary } from "@/actions/upload-actions";
+import { generatePdfSummary, storePdfSummary } from "@/actions/upload-actions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useUploadThing } from "@/lib/uploadthing";
+import { formatFileNameAsTitle } from "@/utils/format";
 
 const uploadFileSchema = z.object({
   file: z
@@ -21,6 +22,7 @@ const uploadFileSchema = z.object({
 export default function UploadForm() {
   const [isLoading, setIsLoading] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
+  const router = useRouter();
 
   const { startUpload } = useUploadThing("pdfUploader", {
     onUploadBegin: (fileName) => {
@@ -60,15 +62,16 @@ export default function UploadForm() {
         return;
       }
 
-      const { ufsUrl: fileUrl } = uploadResponse[0];
+      const { name: fileName, ufsUrl: fileUrl } = uploadResponse[0];
 
       toast("📄 Processing PDF", {
         description: "Hang tight! our AI is processing your document ⚡️",
       });
 
-      const { success, data } = await generatePdfSummary(fileUrl);
+      const { success: summarySuccess, data: summaryData } =
+        await generatePdfSummary(fileUrl);
 
-      if (success === false && !data) {
+      if (summarySuccess === false && !summaryData) {
         toast.error("Something went wrong", {
           description:
             "Error occured while summarizing the PDF, please try again...",
@@ -76,6 +79,32 @@ export default function UploadForm() {
         formRef.current?.reset();
         return;
       }
+
+      toast("📄 Saving PDF", {
+        description: "Hang tight! We are saving your summary!",
+      });
+
+      const { success: storeSuccess, data: storeData } = await storePdfSummary({
+        fileUrl,
+        fileName,
+        title: formatFileNameAsTitle(fileName),
+        summary: summaryData!.summary,
+      });
+
+      if (storeSuccess === false && !storeData) {
+        toast.error("Something went wrong", {
+          description:
+            "Error occured while storing the PDF, please try again...",
+        });
+        formRef.current?.reset();
+        return;
+      }
+
+      toast.success("Summary Generated!", {
+        description: "Your PDF has been successfully summarized and saved!",
+      });
+
+      router.push(`/summaries/${storeData!.id}`);
     } catch (error) {
       toast.error("Something went wrong, please try again later...");
       formRef.current?.reset();
