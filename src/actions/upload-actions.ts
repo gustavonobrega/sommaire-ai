@@ -2,7 +2,7 @@
 
 import { generateSummaryFromGemini } from "@/lib/gemini";
 import { fetchAndExtractPdfText } from "@/lib/langchain";
-import { getDbConnection } from "@/lib/neon-db";
+import { getDbConnection } from "@/lib/neon-db/db";
 import { auth } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
 
