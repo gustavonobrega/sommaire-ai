@@ -15,3 +15,7 @@ export interface QueryResult<T = unknown> {
   data: T | null;
   error: string | null;
 }
+
+export interface SummaryByIdType extends SummaryType {
+  word_count: number;
+}
