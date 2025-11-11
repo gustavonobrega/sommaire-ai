@@ -17,7 +17,7 @@ export const PLANS = [
         : "",
     priceId:
       process.env.NODE_ENV === "development"
-        ? "price_1SL0WLCzhal9DsPsLIK5mltq"
+        ? "price_1SL0TxCzhal9DsPs4RsI8fo2"
         : "",
   },
   {
@@ -37,7 +37,7 @@ export const PLANS = [
         : "",
     priceId:
       process.env.NODE_ENV === "development"
-        ? "price_1SL0TxCzhal9DsPs4RsI8fo2"
+        ? "price_1SL0WLCzhal9DsPsLIK5mltq"
         : "",
   },
 ];
