@@ -1,4 +1,4 @@
-export const UPLOAD_LIMIT = 5;
+export const BASIC_UPLOAD_LIMIT = 5;
 
 export const PLANS = [
   {

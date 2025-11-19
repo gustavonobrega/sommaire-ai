@@ -1,4 +1,4 @@
-import { executeQuery } from "@/lib/neon-db/db";
+import { executeQuery, getDbConnection } from "@/lib/neon-db/db";
 import type { SummaryByIdType, SummaryType } from "@/types/database";
 
 export async function getSummaries(userId: string) {
@@ -26,4 +26,23 @@ export async function getSummaryById(id: string) {
   }
 
   return { success, data: data[0], error };
+}
+
+export async function getUserUploadCount(userId: string) {
+  const sql = await getDbConnection();
+
+  try {
+    const [result] = await sql`
+      SELECT COUNT(*) AS count
+      FROM pdf_summaries
+      WHERE user_id = ${userId}
+    `;
+
+    const r = result as Record<string, unknown>;
+    return r?.count ? Number(r.count) : 0;
+  } catch (error: unknown) {
+    console.error("Error fetching user upload count:", error);
+
+    return 0;
+  }
 }

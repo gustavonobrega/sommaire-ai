@@ -4,16 +4,21 @@ import { currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import { ArrowUpRight, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { UPLOAD_LIMIT } from "@/utils/constants";
 import EmptySummary from "@/components/dashboard/empty-summary";
 import SummaryCard from "@/components/dashboard/summary-card";
 import { getSummaries } from "@/lib/neon-db/summaries";
+import { hasReachedUploadLimit } from "@/lib/neon-db/user";
 
 export default async function DashboardPage() {
   const user = await currentUser();
   if (!user) {
     return redirect("/sign-in");
   }
+
+  const { hasReachedLimit, uploadLimit } = await hasReachedUploadLimit(
+    user?.id,
+    user?.emailAddresses?.[0]?.emailAddress,
+  );
 
   const { success, data: summaries, error } = await getSummaries(user.id);
 
@@ -33,36 +38,40 @@ export default async function DashboardPage() {
               Transform your PDFs into concise, actionable insights
             </p>
           </div>
-          <Button
-            variant={"link"}
-            className="bg-linear-to-r from-rose-500 to-rose-700 hover:from-rose-600 hover:to-rose-800 hover:scale-105 transition-all duration-300 hover:no-underline"
-            asChild
-          >
-            <Link
-              href="/upload"
-              className="flex 
-              items-center text-white"
+          {!hasReachedLimit && (
+            <Button
+              variant={"link"}
+              className="bg-linear-to-r from-rose-500 to-rose-700 hover:from-rose-600 hover:to-rose-800 hover:scale-105 transition-all duration-300 hover:no-underline"
+              asChild
             >
-              <Plus />
-              New Summary
-            </Link>
-          </Button>
+              <Link
+                href="/upload"
+                className="flex 
+              items-center text-white"
+              >
+                <Plus />
+                New Summary
+              </Link>
+            </Button>
+          )}
         </div>
 
-        <div className="bg-rose-50 border border-rose-200 rounded-lg p-4 text-rose-800">
-          <p className="text-sm">
-            You&apos;ve reached the limit of {UPLOAD_LIMIT} uploads on the Basic
-            plan.{" "}
-            <Link
-              href="/#pricing"
-              className="text-rose-800 underline font-medium underline-offset-4 inline-flex items-center"
-            >
-              Click here to upgrade to Pro
-              <ArrowUpRight className="w-4 h-4" />
-            </Link>{" "}
-            for unlimited uploads.
-          </p>
-        </div>
+        {hasReachedLimit && (
+          <div className="bg-rose-50 border border-rose-200 rounded-lg p-4 text-rose-800">
+            <p className="text-sm">
+              You&apos;ve reached the limit of {uploadLimit} uploads on the
+              Basic plan.{" "}
+              <Link
+                href="/#pricing"
+                className="text-rose-800 underline font-medium underline-offset-4 inline-flex items-center"
+              >
+                Click here to upgrade to Pro
+                <ArrowUpRight className="w-4 h-4" />
+              </Link>{" "}
+              for unlimited uploads.
+            </p>
+          </div>
+        )}
 
         {summaries?.length === 0 ? (
           <div className="text-center pt-12 pb-24">
