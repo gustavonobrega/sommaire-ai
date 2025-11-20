@@ -11,6 +11,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useUploadThing } from "@/lib/uploadthing";
 import { formatFileNameAsTitle } from "@/utils/format";
+import { LoadingSkeleton } from "./loading-skeleton";
+import UploadSeparator from "./upload-separator";
 
 const uploadFileSchema = z.object({
   file: z
@@ -139,6 +141,12 @@ export default function UploadForm() {
           )}
         </Button>
       </div>
+      {isLoading && (
+        <>
+          <UploadSeparator text="Processing" />
+          <LoadingSkeleton />
+        </>
+      )}
     </form>
   );
 }
