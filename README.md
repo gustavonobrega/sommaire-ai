@@ -1,36 +1,56 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+<h1 align="center">📄 Sommaire — AI-Powered PDF Summarization </h1>
 
-## Getting Started
+<p align="center">Transform PDFs into concise summaries using the power of AI!</p>
 
-First, run the development server:
+## 🚀 Tech Stack
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+**Core Technologies:**
+- ⚡️ Next.js 15 (App Router) — server-side rendering, routing, and API endpoints with Server Components and Server Actions
+- ⚛️ React 19 — building interactive user interfaces with reusable components
+- 🔑 Clerk — secure authentication with Passkeys, Github, and Google Sign-in
+- 🧠 Gemini — contextual summarization with emoji-enhanced output
+- 🦜 Langchain — PDF parsing, text extraction and document chunking
+- 🧱 ShadCN UI — beautiful, accessible UI components
+- 🧵 TailwindCSS 4 — utility-first styling
+- 🧠 TypeScript — type safety and enhanced development experience
+- 🐘 NeonDB (PostgreSQL) — serverless database storage for storing summaries
+- ☁️ UploadThing — secure file uploads (up to 32MB) and file management
+- 💳 Stripe — subscription management, cancellations and secure payment processing
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## ✨ Features
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- 📝 Clear, structured summaries with key points and insights  
+- 🎨 Beautiful, interactive summary viewer with progress tracking  
+- 🔒 Secure file handling & route protection  
+- 💰 Flexible pricing (Basic & Pro plans) with Stripe webhooks  
+- 📊 User dashboard for summary management  
+- 📱 Responsive design (mobile & desktop)  
+- 🔄 Real-time updates and path revalidation  
+- 🔔 Toast notifications for upload status, processing updates, and error handling  
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## 🛠 Getting Started
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+To run the project locally:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. **Clone** this repo
+2. Copy `.env.example` to `.env`
+3. Set up the following credentials:
+   - 🔑 Gemini Key
+   - 👥 Clerk Secret & Public Keys
+   - ☁️ UploadThing Keys
+   - 💳 Stripe Webhook & Keys
+   - 🐘 NeonDB Database URL
+4. Install dependencies:
+   ```bash
+   npm install
+5. Start the dev server:
+   ```bash
+   npm run dev
+   
+---
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+<p align="center">Made with ♥ by Gustavo Nóbrega<p/>
